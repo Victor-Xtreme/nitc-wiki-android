@@ -75,7 +75,7 @@ conflict while we maintain a fork that addresses NITC-specific needs.
 ## 3. Phased Migration Plan
 
 ### Phase 0: Reconnaissance & tooling (Week 1)
-- [ ] Register the wiki with the MediaWiki MCP server
+- [x] Register the wiki with the MediaWiki MCP server
 - [ ] Map all `api.php` capabilities on the target wiki
 - [ ] Confirm whether `rest.php` can be enabled on the server
 - [ ] Audit the upstream git log to identify the last clean merge point
