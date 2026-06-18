@@ -46,12 +46,12 @@ data class WikiSite(
     constructor(uri: Uri) : this(uri, "") {
         val tempUri = ensureScheme(uri)
         var authority = tempUri.authority.orEmpty()
-        if ((BASE_DOMAIN == authority || ("www.$BASE_DOMAIN") == authority) &&
-            tempUri.path?.startsWith("/wiki") == true
-        ) {
-            // Special case for Wikipedia only: assume English subdomain when none given.
-            authority = "en.$BASE_DOMAIN"
-        }
+//        if ((BASE_DOMAIN == authority || ("www.$BASE_DOMAIN") == authority) &&
+//            tempUri.path?.startsWith("/wiki") == true
+//        ) {
+//            // Special case for Wikipedia only: assume English subdomain when none given.
+//            authority = "en.$BASE_DOMAIN"
+//        }
 
         // Unconditionally transform any mobile authority to canonical.
         authority = authority.replace(".m.", ".")
@@ -73,16 +73,16 @@ data class WikiSite(
             } ?: languageCode
         }
 
-        if (languageCode == Constants.WIKI_CODE_COMMONS) {
-            // Special case for Commons: if the WikiSite was constructed from "commons.wikimedia.org",
-            // then the languageCode will be "commons" which is incorrect, so set it to the default language.
-            languageCode = WikipediaApp.instance.appOrSystemLanguageCode
-        }
+//        if (languageCode == Constants.WIKI_CODE_COMMONS) {
+//            // Special case for Commons: if the WikiSite was constructed from "commons.wikimedia.org",
+//            // then the languageCode will be "commons" which is incorrect, so set it to the default language.
+//            languageCode = WikipediaApp.instance.appOrSystemLanguageCode
+//        }
 
         // Use default subdomain in authority to prevent error when requesting endpoints. e.g. zh-tw.wikipedia.org
-        if (authority.contains(BASE_DOMAIN) && subdomain().isNotEmpty()) {
-            authority = subdomain() + "." + BASE_DOMAIN
-        }
+//        if (authority.contains(BASE_DOMAIN) && subdomain().isNotEmpty()) {
+//            authority = subdomain() + "." + BASE_DOMAIN
+//        }
         this.uri = Uri.Builder().scheme(tempUri.scheme).encodedAuthority(authority).build()
     }
 
@@ -134,7 +134,7 @@ data class WikiSite(
 
     companion object {
         const val DEFAULT_SCHEME = "https"
-        const val BASE_DOMAIN = "wikipedia.org"
+        const val BASE_DOMAIN = "fosscell.org"
         private var DEFAULT_BASE_URL: String? = null
 
         fun supportedAuthority(authority: String): Boolean {
@@ -148,8 +148,8 @@ data class WikiSite(
         fun forLanguageCode(languageCode: String): WikiSite {
             val uri = ensureScheme(DEFAULT_BASE_URL!!.toUri())
             return WikiSite(
-                (if (languageCode.isEmpty()) "" else languageCodeToSubdomain(languageCode) + ".") + uri.authority,
-                languageCode
+//                (if (languageCode.isEmpty()) "" else languageCodeToSubdomain(languageCode) + ".") + uri.authority,
+                 "" + uri.authority, languageCode
             )
         }
 
@@ -176,16 +176,17 @@ data class WikiSite(
         }
 
         fun authorityToLanguageCode(authority: String): String {
-            val parts = authority.split("\\.".toRegex()).toTypedArray()
-            val minLengthForSubdomain = 3
-            return if (parts.size < minLengthForSubdomain ||
-                parts.size == minLengthForSubdomain && parts[0] == "m"
-            ) {
-                // ""
-                // wikipedia.org
-                // m.wikipedia.org
-                ""
-            } else parts[0]
+            return ""
+//            val parts = authority.split("\\.".toRegex()).toTypedArray()
+//            val minLengthForSubdomain = 3
+//            return if (parts.size < minLengthForSubdomain ||
+//                parts.size == minLengthForSubdomain && parts[0] == "m"
+//            ) {
+//                // ""
+//                // wikipedia.org
+//                // m.wikipedia.org
+//                ""
+//            } else parts[0]
         }
 
         private fun ensureScheme(uri: Uri): Uri {
