@@ -12,6 +12,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
+import org.wikipedia.BuildConfig
 import org.wikipedia.bridge.JavaScriptActionHandler.setUp
 import org.wikipedia.dataclient.RestService
 import org.wikipedia.dataclient.ServiceFactory
@@ -78,7 +79,7 @@ class CommunicationBridge constructor(private val communicationBridgeListener: C
         isMetadataReady = false
         pendingJSMessages.clear()
         pendingEvals.clear()
-        if (communicationBridgeListener.model.shouldLoadAsMobileWeb) {
+        if (communicationBridgeListener.model.shouldLoadAsMobileWeb || !BuildConfig.HAS_RESTBASE) {
             communicationBridgeListener.webView.loadUrl(pageTitle.uri)
         } else {
             communicationBridgeListener.webView.loadUrl(ServiceFactory.getRestBasePath(pageTitle.wikiSite) +
