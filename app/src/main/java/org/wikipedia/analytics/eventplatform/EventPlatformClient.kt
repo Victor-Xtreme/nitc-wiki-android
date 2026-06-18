@@ -15,6 +15,7 @@ import org.wikimedia.testkitchen.config.sampling.SampleConfig
 import org.wikipedia.BuildConfig
 import org.wikipedia.WikipediaApp
 import org.wikipedia.analytics.testkitchen.TestKitchenAdapter
+import org.wikipedia.dataclient.Service
 import org.wikipedia.dataclient.ServiceFactory
 import org.wikipedia.dataclient.WikiSite
 import org.wikipedia.dataclient.okhttp.HttpStatusException
@@ -62,6 +63,9 @@ object EventPlatformClient {
      * as other considerations.
      */
     fun setEnabled(enabled: Boolean) {
+        if (!BuildConfig.HAS_EVENTGATE) {
+            return
+        }
         ENABLED = enabled
         if (ENABLED) {
             /*
@@ -78,6 +82,9 @@ object EventPlatformClient {
      * @param event event
      */
     fun submit(event: Event) {
+        if (!BuildConfig.HAS_EVENTGATE) {
+            return
+        }
         if (STREAM_CONFIGS.isEmpty()) {
             // We haven't gotten stream configs yet, so queue up the event in our initial queue.
             synchronized(INITIAL_QUEUE) {
@@ -100,6 +107,9 @@ object EventPlatformClient {
     }
 
     fun flushCachedEvents() {
+        if (!BuildConfig.HAS_EVENTGATE) {
+            return
+        }
         if (STREAM_CONFIGS.isNotEmpty()) {
             // If we have events left over in our initial queue, submit them now, so they'll be send in this pass.
             synchronized(INITIAL_QUEUE) {
@@ -115,8 +125,11 @@ object EventPlatformClient {
     }
 
     suspend fun refreshStreamConfigs() {
+        if (!BuildConfig.HAS_EVENTGATE) {
+            return
+        }
         STREAM_CONFIGS.clear()
-        STREAM_CONFIGS.putAll(ServiceFactory.get(WikiSite(BuildConfig.META_WIKI_BASE_URI)).getStreamConfigs().streamConfigs)
+        STREAM_CONFIGS.putAll(ServiceFactory.get(WikiSite(Service.META_WIKI_BASE_URI)).getStreamConfigs().streamConfigs)
         // Ensure that serialization of configs is done off the main thread
         withContext(Dispatchers.Default) {
             Prefs.streamConfigs = STREAM_CONFIGS
@@ -125,6 +138,9 @@ object EventPlatformClient {
     }
 
     fun setUpStreamConfigs() {
+        if (!BuildConfig.HAS_EVENTGATE) {
+            return
+        }
         MainScope().launch(CoroutineExceptionHandler { _, t ->
             L.e(t)
         }) {

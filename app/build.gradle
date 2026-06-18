@@ -3,10 +3,14 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     id 'com.android.application'
     id 'com.google.devtools.ksp'
-    id 'com.google.gms.google-services'
     id 'kotlin-parcelize'
     id 'kotlinx-serialization'
     alias(libs.plugins.compose.compiler)
+}
+
+def isNitcwiki = gradle.startParameter.taskNames.any { it.toLowerCase().contains('nitcwiki') }
+if (!isNitcwiki) {
+    apply plugin: 'com.google.gms.google-services'
 }
 
 // Copy the signing.properties.sample file to ~/.sign/signing.properties and adjust the values.
@@ -48,15 +52,17 @@ android {
 
         signingConfig = signingConfigs.debug
 
-        buildConfigField "String", "DEFAULT_RESTBASE_URI_FORMAT", '"%1$s://%2$s/api/rest_v1/"'
-        buildConfigField "String", "META_WIKI_BASE_URI", '"https://meta.wikimedia.org"'
-        buildConfigField "String", "EVENTGATE_ANALYTICS_EXTERNAL_BASE_URI", '"https://intake-analytics.wikimedia.org"'
-        buildConfigField "String", "EVENTGATE_LOGGING_EXTERNAL_BASE_URI", '"https://intake-logging.wikimedia.org"'
         def TEST_LOGIN_USERNAME = System.getenv('TEST_LOGIN_USERNAME')
         def TEST_LOGIN_PASSWORD = System.getenv('TEST_LOGIN_PASSWORD')
 
         buildConfigField "String", "TEST_LOGIN_USERNAME", TEST_LOGIN_USERNAME != null ? "\"${TEST_LOGIN_USERNAME}\"" : '"Foo"'
         buildConfigField "String", "TEST_LOGIN_PASSWORD", TEST_LOGIN_PASSWORD != null ? "\"${TEST_LOGIN_PASSWORD}\"" : '"Bar"'
+
+        buildConfigField "boolean", "HAS_RESTBASE", "true"
+        buildConfigField "boolean", "HAS_EVENTGATE", "true"
+        buildConfigField "boolean", "HAS_CORE_REST", "true"
+        buildConfigField "boolean", "HAS_COMMONS", "true"
+        buildConfigField "boolean", "HAS_WIKIDATA", "true"
     }
 
     testOptions {
@@ -113,9 +119,6 @@ android {
         dev {
             versionName computeVersionName(defaultConfig.versionCode, 'dev')
             applicationIdSuffix '.dev'
-            buildConfigField "String", "META_WIKI_BASE_URI", '"https://meta.wikimedia.beta.wmflabs.org"'
-            buildConfigField "String", "EVENTGATE_ANALYTICS_EXTERNAL_BASE_URI", '"https://intake-analytics.wikimedia.beta.wmflabs.org"'
-            buildConfigField "String", "EVENTGATE_LOGGING_EXTERNAL_BASE_URI", '"https://intake-logging.wikimedia.beta.wmflabs.org"'
         }
         prod {
             versionName computeVersionName(defaultConfig.versionCode, 'r')
@@ -139,6 +142,18 @@ android {
             // next line is for injecting a custom channel value into the custom/AndroidManifest.xml
             manifestPlaceholders = [customChannel:getProperty('customChannel').toString()]
             signingConfig = signingConfigs.prod
+        }
+        nitcwiki {
+            applicationId 'org.nitcwiki'
+            versionName computeVersionName(defaultConfig.versionCode, 'nitcwiki')
+            buildConfigField "boolean", "IS_NITC_WIKI", "true"
+            buildConfigField "String",  "WIKI_BASE_URL",  '"https://wiki.fosscell.org"'
+            buildConfigField "String",  "WIKI_API_URL",   '"https://wiki.fosscell.org/api.php"'
+            buildConfigField "boolean", "HAS_RESTBASE",   "false"
+            buildConfigField "boolean", "HAS_CORE_REST",  "false"
+            buildConfigField "boolean", "HAS_COMMONS",    "false"
+            buildConfigField "boolean", "HAS_WIKIDATA",   "false"
+            buildConfigField "boolean", "HAS_EVENTGATE",  "false"
         }
     }
 
