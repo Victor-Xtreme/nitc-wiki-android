@@ -282,6 +282,14 @@ interface Service {
         @Query("colimit") coLimit: Int,
     ): MwQueryResponse
 
+    @GET(MW_API_PREFIX + "action=query&generator=geosearch&prop=coordinates|description|pageimages|info|extracts&exchars=500&exintro=1&explaintext=1&inprop=varianttitles|displaytitle&pilicense=any")
+    suspend fun getGeoSearchWithExtracts(
+        @Query("ggscoord", encoded = true) coordinates: String,
+        @Query("ggsradius") radius: Int,
+        @Query("ggslimit") ggsLimit: Int,
+        @Query("colimit") coLimit: Int,
+    ): MwQueryResponse
+
     @GET("api.php?format=json&action=getPaymentMethods")
     suspend fun getPaymentMethods(@Query("country") country: String): PaymentResponseContainer
 
@@ -768,6 +776,8 @@ interface Service {
         const val BASE_AUTHORITY_WIKIDATA = "wikidata.org"
         const val WIKIDATA_URL = "https://www.${BASE_AUTHORITY_WIKIDATA}/"
         const val COMMONS_URL = "https://commons.wikimedia.org/"
+        const val META_WIKI_BASE_URI = "https://meta.wikimedia.org"
+        const val DEFAULT_RESTBASE_URI_FORMAT = "%1\$s://%2\$s/api/rest_v1/"
         const val URL_FRAGMENT_FROM_COMMONS = "/wikipedia/commons/"
         const val MW_API_PREFIX = "api.php?format=json&formatversion=2&errorformat=html&errorsuselocal=1&"
         const val PREFERRED_THUMB_SIZE = 330
