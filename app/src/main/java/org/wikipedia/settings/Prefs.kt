@@ -17,6 +17,7 @@ import org.wikipedia.WikipediaApp
 import org.wikipedia.activitytab.ActivityTabModules
 import org.wikipedia.analytics.SessionData
 import org.wikipedia.analytics.eventplatform.AppSessionEvent
+import org.wikipedia.dataclient.Service
 import org.wikipedia.dataclient.WikiSite
 import org.wikipedia.donate.DonationResult
 import org.wikipedia.donate.donationreminder.DonationReminderConfig
@@ -174,7 +175,7 @@ object Prefs {
 
     val restbaseUriFormat
         get() = PrefsIoUtil.getString(R.string.preference_key_restbase_uri_format, null)
-            .orEmpty().ifEmpty { BuildConfig.DEFAULT_RESTBASE_URI_FORMAT }
+            .orEmpty().ifEmpty { Service.DEFAULT_RESTBASE_URI_FORMAT }
 
     val mediaWikiBaseUrl
         get() = PrefsIoUtil.getString(R.string.preference_key_mediawiki_base_uri, "")!!

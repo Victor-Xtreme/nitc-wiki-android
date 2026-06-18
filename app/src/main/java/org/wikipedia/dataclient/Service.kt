@@ -776,6 +776,8 @@ interface Service {
         const val BASE_AUTHORITY_WIKIDATA = "wikidata.org"
         const val WIKIDATA_URL = "https://www.${BASE_AUTHORITY_WIKIDATA}/"
         const val COMMONS_URL = "https://commons.wikimedia.org/"
+        const val META_WIKI_BASE_URI = "https://meta.wikimedia.org"
+        const val DEFAULT_RESTBASE_URI_FORMAT = "%1\$s://%2\$s/api/rest_v1/"
         const val URL_FRAGMENT_FROM_COMMONS = "/wikipedia/commons/"
         const val MW_API_PREFIX = "w/api.php?format=json&formatversion=2&errorformat=html&errorsuselocal=1&"
         const val PREFERRED_THUMB_SIZE = 330
