@@ -4,20 +4,23 @@
 
     <application>
 
-        <!-- Victor's existing additions -->
+        <!-- Set the build channel metadata to "nitcwiki" -->
         <meta-data
             android:name="@string/preference_key_app_channel"
             android:value="nitcwiki"
             tools:replace="android:value" />
 
+        <!-- Remove Google Pay wallet metadata — not used -->
         <meta-data
             android:name="com.google.android.gms.wallet.api.enabled"
             tools:node="remove" />
 
+        <!-- Remove Firebase messaging service — stubbed out -->
         <service
             android:name=".push.WikipediaFirebaseMessagingService"
             tools:node="remove" />
 
+        <!-- Remove Google Pay donate activity — not applicable -->
         <activity
             android:name=".donate.GooglePayActivity"
             tools:node="remove" />
