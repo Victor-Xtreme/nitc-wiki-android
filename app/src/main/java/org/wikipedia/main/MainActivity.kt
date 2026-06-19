@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import org.wikipedia.BuildConfig
 import org.wikipedia.Constants
 import org.wikipedia.R
 import org.wikipedia.WikipediaApp
@@ -219,7 +220,8 @@ class MainActivity : SingleFragmentActivity<MainFragment>(), MainFragment.Callba
             intent.data?.let {
                 if (it.authority.orEmpty().endsWith(WikiSite.BASE_DOMAIN)) {
                     // Pass it right along to PageActivity
-                    val uri = it.toString().replace("wikipedia://", WikiSite.DEFAULT_SCHEME + "://").toUri()
+                    val oldScheme = if (BuildConfig.IS_NITC_WIKI) "nitcwiki://" else "wikipedia://"
+                    val uri = it.toString().replace(oldScheme, WikiSite.DEFAULT_SCHEME + "://").toUri()
                     startActivity(Intent(this, PageActivity::class.java)
                             .setAction(Intent.ACTION_VIEW)
                             .setData(uri))

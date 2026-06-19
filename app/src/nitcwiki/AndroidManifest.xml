@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -24,6 +25,42 @@
             android:name=".donate.GooglePayActivity"
             tools:node="remove" />
 
-    </application>
+        <!-- Person 4 additions: deep link scheme + host -->
 
+        <activity-alias
+            android:name=".DefaultIcon"
+            android:targetActivity=".main.MainActivity"
+            android:icon="@mipmap/launcher"
+            android:exported="true">
+            <intent-filter tools:node="replace">
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+            </intent-filter>
+            <intent-filter tools:node="replace">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="nitcwiki" />
+                <data android:host="wiki.fosscell.org" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity
+            android:name=".page.PageActivity"
+            android:exported="true">
+            <intent-filter
+                tools:node="replace"
+                tools:targetApi="m"
+                android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="wiki.fosscell.org" />
+            </intent-filter>
+        </activity>
+
+    </application>
 </manifest>

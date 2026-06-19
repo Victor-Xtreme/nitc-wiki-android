@@ -6,6 +6,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import org.wikimedia.testkitchen.config.DestinationEventService
+import org.wikipedia.BuildConfig
 import org.wikipedia.WikipediaApp
 import org.wikipedia.analytics.eventplatform.EventService
 import org.wikipedia.dataclient.okhttp.OkHttpConnectionFactory
@@ -69,6 +70,10 @@ object ServiceFactory {
     }
 
     fun getRestBasePath(wiki: WikiSite): String {
+        if (!BuildConfig.HAS_RESTBASE) {
+            // No RESTBase available; fall back to MW API base path instead.
+            return getBasePath(wiki)
+        }
         var path = if (Prefs.restbaseUriFormat.isEmpty()) wiki.url() + "/" + RestService.REST_API_PREFIX
         else String.format(Prefs.restbaseUriFormat, "https", wiki.authority())
         if (!path.endsWith("/")) {
