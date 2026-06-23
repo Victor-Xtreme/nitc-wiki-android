@@ -20,3 +20,8 @@ jobs:
     - uses: gradle/gradle-build-action@v3
     - name: Build NITC Wiki dev debug
       run: ./gradlew clean assembleNitcwikiDebug --no-daemon
+    - name: Upload debug APK
+      uses: actions/upload-artifact@v7
+      with:
+        name: nitcwiki-debug-apk
+        path: app/build/outputs/apk/nitcwiki/debug/*.apk
