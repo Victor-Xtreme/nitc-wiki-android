@@ -25,7 +25,7 @@ static def computeVersionName(versionCode, label) {
 }
 
 android {
-    compileSdk = 36
+    compileSdk = 37
 
     compileOptions {
         coreLibraryDesugaringEnabled = true
@@ -43,7 +43,7 @@ android {
     defaultConfig {
         applicationId 'org.wikipedia'
         minSdk = 23
-        targetSdk = 36
+        targetSdk = 37
         versionCode 50595
         testApplicationId 'org.wikipedia.test'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -64,6 +64,7 @@ android {
         buildConfigField "boolean", "HAS_CORE_REST", "true"
         buildConfigField "boolean", "HAS_COMMONS", "true"
         buildConfigField "boolean", "HAS_WIKIDATA", "true"
+        buildConfigField "boolean", "IS_NITC_WIKI", "false"
     }
 
     testOptions {

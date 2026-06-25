@@ -70,10 +70,10 @@ object ServiceFactory {
     }
 
     fun getRestBasePath(wiki: WikiSite): String {
-        if (!BuildConfig.HAS_RESTBASE) {
-            // No RESTBase available; fall back to MW API base path instead.
-            return getBasePath(wiki)
-        }
+//        if (!BuildConfig.HAS_RESTBASE) {
+//            // No RESTBase available; fall back to MW API base path instead.
+//            return getBasePath(wiki)
+//        }
         var path = if (Prefs.restbaseUriFormat.isEmpty()) wiki.url() + "/" + RestService.REST_API_PREFIX
         else String.format(Prefs.restbaseUriFormat, "https", wiki.authority())
         if (!path.endsWith("/")) {
